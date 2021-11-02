@@ -7,8 +7,9 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import { ColorSchemeName, Pressable } from 'react-native';
+import io from "socket.io-client";
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
@@ -20,6 +21,16 @@ import LinkingConfiguration from './LinkingConfiguration';
 import SettingsScreen from '../screens/SettingsScreen';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
+  useEffect(() => {
+    const artists = ["0xdcd49761c86547a18936cdcb46eb3cd65a34e617"]; // See if there's a React Native version of UserPrefs/CoreData etc
+    const socket = io("http://127.0.0.1:3000", { query: { artists: JSON.stringify(artists) } });
+    socket.on("FromAPI", data => {
+      console.log(data);
+    });
+    return () => {
+      socket.disconnect();
+    };
+  }, [])
   return (
     <NavigationContainer
       linking={LinkingConfiguration}

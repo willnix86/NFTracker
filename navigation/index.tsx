@@ -9,7 +9,7 @@ import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { useEffect } from 'react';
 import { ColorSchemeName, Pressable } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import io from "socket.io-client";
 
 import Colors from '../constants/Colors';
@@ -20,18 +20,30 @@ import ArtistsScreen from '../screens/ArtistsScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import AddArtistScreen from '../screens/AddArtistScreen';
 
-import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
+import { Artist, RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
 import { RootState } from '../store';
+import { setNewDrops } from '../store/slices/artistsSlice';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   const artists = useSelector((state: RootState) => state.artistsReducer.artists);
+  const newDropAccounts = useSelector((state: RootState) => state.artistsReducer.newDropAccounts);
+  
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log()
     const socket = io("http://127.0.0.1:3000", { query: { artists: JSON.stringify(artists) } });
-    socket.on("FromAPI", data => {
-      console.log(data);
+    socket.on("FromAPI", (artistsWithNewDrops: string[]) => {
+      if (artistsWithNewDrops.length > 0) {
+        const updatedAccounts = [...newDropAccounts];
+        artistsWithNewDrops.forEach((artist: string) => {
+          const index = updatedAccounts.findIndex(a => a === artist);
+          if (index > -1) {
+            updatedAccounts.push(artist);
+          }
+        });
+        dispatch(setNewDrops(updatedAccounts));
+      }
     });
     return () => {
       socket.disconnect();

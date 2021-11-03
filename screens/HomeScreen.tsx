@@ -10,14 +10,23 @@ import ArtistItem from '../components/ArtistItem';
 
 export default function HomeScreen({ navigation }: RootTabScreenProps<'Home'>) {
   const artists = useSelector((state: RootState) => state.artistsReducer.artists);
+  const newDropAccounts = useSelector((state: RootState) => state.artistsReducer.newDropAccounts);
 
   return (
     <View style={styles.container}>
+      {newDropAccounts.length > 0 && <View style={styles.subContainer}>
+        <Text style={styles.title}>New Drops</Text>
+        {artists.map((artist: Artist) => {
+          if (newDropAccounts.includes(artist.account)) {
+            return <ArtistItem artist={artist} key={artist.name} hasNewDrops={true} />
+          }
+        })}
+      </View>}
       <View style={styles.subContainer}>
         <Text style={styles.title}>Tracked Artists</Text>
         {artists &&
           (artists as Artist[]).map((artist) => (
-            <ArtistItem key={artist.name} name={artist.name} hasNewDrops={false} />
+            <ArtistItem artist={artist} key={artist.name} hasNewDrops={false} />
           ))}
       </View>
     </View>

@@ -1,24 +1,42 @@
+import * as WebBrowser from 'expo-web-browser';
 import React from 'react';
-import { View, Text } from './Themed';
 import { StyleSheet, TouchableOpacity } from 'react-native';
-import Colors from '../constants/Colors';
+import { useDispatch, useSelector } from 'react-redux';
 
-export default function ArtistItem({ name, hasNewDrops }: { name: string, hasNewDrops: boolean }) {
+import Colors from '../constants/Colors';
+import { RootState } from '../store';
+import { setNewDrops } from '../store/slices/artistsSlice';
+import { Artist } from '../types';
+import { View, Text } from './Themed';
+
+export default function ArtistItem({ artist, hasNewDrops }: { artist: Artist, hasNewDrops: boolean }) {
+  const newDropAccounts = useSelector((state: RootState) => state.artistsReducer.newDropAccounts);
+  const dispatch = useDispatch();
+
+  const visitArtist = () => {
+    WebBrowser.openBrowserAsync(
+      `https://opensea.io/${artist.account}?search[sortBy]=CREATED_DATE&search[sortAscending]=false&search[toggles][0]=IS_NEW`
+    );
+    const unvisited = newDropAccounts.filter((acc) => acc !== artist.account);
+    dispatch(setNewDrops(unvisited));
+    // 
+  };
+
   if (hasNewDrops) {
     return (
       <View style={styles.container}>
         <View 
           style={styles.newDrops}
         />
-        <TouchableOpacity>
-          <Text style={styles.artist}>{name}</Text>
+        <TouchableOpacity onPress={visitArtist}>
+          <Text style={styles.artist}>{artist.name}</Text>
         </TouchableOpacity>
       </View>
     )
   } else {
     return (
       <View style={styles.container}>
-        <Text style={styles.artistNoDrop}>{name}</Text>
+        <Text style={styles.artistNoDrop}>{artist.name}</Text>
       </View>
     )
   }
@@ -47,7 +65,7 @@ const styles = StyleSheet.create({
   },
   artistNoDrop: {
     fontSize: 18,
-    marginLeft: 25,
+    // marginLeft: 25,
   },
   artistLink: {
     marginHorizontal: 10,

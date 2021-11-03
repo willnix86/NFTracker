@@ -5,18 +5,40 @@ import { Picker } from '@react-native-picker/picker';
 import Colors from '../../constants/Colors';
 import { Text, View, TextInput } from '../Themed';
 
+import useAsyncStorage from '../../hooks/useAsyncStorage';
+
 export default function AddArtistForm() {
   const [selectedPlatform, setSelectedPlatform] = useState('opensea')
   const [artistName, setArtistName] = useState('');
   const [artistAccount, setArtistAccount] = useState('');
   const [error, setError] = useState('');
+  const [savedSuccessfully, setSavedSuccessfully] = useState(false);
 
-  function saveArtist() {
+  const [storedItem, storeItem, storageError] = useAsyncStorage('artists');
+
+  useEffect(() => {
+    if ((!!artistName || !!artistAccount || !!selectedPlatform) && !!error) {
+      setError('');
+    }
+  }, [artistName, artistAccount, selectedPlatform]);
+
+  const saveArtist = async() => {
     if (!selectedPlatform || !artistName || !artistAccount) {
       setError('Please fill out all fields');
-      // setTimeout(() => {
-      //   setError('');
-      // }, 5000);
+    }
+    await storeItem({ 
+      artistName,
+      artistAccount,
+      selectedPlatform
+    });
+    
+    if (!!storageError) {
+      setError(storageError);
+    } else  {
+      setArtistName('');
+      setArtistAccount('');
+      setSelectedPlatform('opensea');
+      setSavedSuccessfully(true);
     }
     // CORE DATA
     // USER PREFS etc
@@ -24,9 +46,7 @@ export default function AddArtistForm() {
   
   return (
     <View style={styles.container}>
-      <Text style={styles.errorText}>
-        {error}
-      </Text>
+      <Text style={savedSuccessfully ? styles.successText : styles.errorText}>{savedSuccessfully ? 'Artist Added!' : error}</Text>
       <View style={styles.inputContainer}>
         <Text style={styles.title}>Platform</Text>
         <Picker
@@ -76,6 +96,12 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: 'red',
+    fontWeight: 'bold',
+    fontSize: 18,
+    marginTop: 15
+  },
+  successText: {
+    color: 'green',
     fontWeight: 'bold',
     fontSize: 18,
     marginTop: 15

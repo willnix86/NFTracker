@@ -41,8 +41,6 @@ export default function AddArtistForm() {
       setSelectedPlatform('opensea');
       setSavedSuccessfully(true);
     }
-    // CORE DATA
-    // USER PREFS etc
   }
   
   return (

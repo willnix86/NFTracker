@@ -9,6 +9,7 @@ import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { useEffect } from 'react';
 import { ColorSchemeName, Pressable } from 'react-native';
+import { useSelector } from 'react-redux';
 import io from "socket.io-client";
 
 import Colors from '../constants/Colors';
@@ -21,10 +22,11 @@ import AddArtistScreen from '../screens/AddArtistScreen';
 
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
+import { RootState } from '../store';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   useEffect(() => {
-    const artists = ["0xdcd49761c86547a18936cdcb46eb3cd65a34e617"]; // See if there's a React Native version of UserPrefs/CoreData etc
+    const artists = useSelector((state: RootState) => state.artistsReducer.artists);
     const socket = io("http://127.0.0.1:3000", { query: { artists: JSON.stringify(artists) } });
     socket.on("FromAPI", data => {
       console.log(data);

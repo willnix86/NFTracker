@@ -5,7 +5,7 @@ import { Picker } from '@react-native-picker/picker';
 import Colors from '../../constants/Colors';
 import { Text, View, TextInput } from '../Themed';
 
-import useAsyncStorage from '../../hooks/useAsyncStorage';
+import StorageController from '../../controllers/StorageController';
 
 export default function AddArtistForm() {
   const [selectedPlatform, setSelectedPlatform] = useState('opensea')
@@ -14,11 +14,12 @@ export default function AddArtistForm() {
   const [error, setError] = useState('');
   const [savedSuccessfully, setSavedSuccessfully] = useState(false);
 
-  const [storedItem, storeItem, storageError] = useAsyncStorage('artists');
 
   useEffect(() => {
     if ((!!artistName || !!artistAccount || !!selectedPlatform) && !!error) {
       setError('');
+    } else {
+      setSavedSuccessfully(false);
     }
   }, [artistName, artistAccount, selectedPlatform]);
 
@@ -26,14 +27,14 @@ export default function AddArtistForm() {
     if (!selectedPlatform || !artistName || !artistAccount) {
       setError('Please fill out all fields');
     }
-    await storeItem({ 
-      artistName,
-      artistAccount,
-      selectedPlatform
+    await StorageController.storeItem('artists', { 
+      name: artistName,
+      account: artistAccount,
+      platofrm: selectedPlatform
     });
     
-    if (!!storageError) {
-      setError(storageError);
+    if (!!StorageController.storageError) {
+      setError(StorageController.storageError);
     } else  {
       setArtistName('');
       setArtistAccount('');
@@ -63,6 +64,7 @@ export default function AddArtistForm() {
         <Text style={styles.title}>Artist Name</Text>
         <TextInput 
           style={styles.textInput}
+          value={artistName}
           placeholder="e.g KumaheadgearNFT"
           onChangeText={setArtistName}
         />
@@ -71,6 +73,7 @@ export default function AddArtistForm() {
         <Text style={styles.title}>Artist Address</Text>
         <TextInput 
           style={styles.textInput}
+          value={artistAccount}
           placeholder="e.g 0xdcd49761c86547a18936cdcb46eb3cd65a34e617"
           onChangeText={setArtistAccount}
         />

@@ -22,7 +22,6 @@ import AddArtistScreen from '../screens/AddArtistScreen';
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
 
-
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   useEffect(() => {
     const artists = ["0xdcd49761c86547a18936cdcb46eb3cd65a34e617"]; // See if there's a React Native version of UserPrefs/CoreData etc

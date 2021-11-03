@@ -1,9 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState, useEffect } from 'react';
-import { StoredItemKey } from '../types';
-
-type AnyObject = { [key: string]: any }
-type StoredItem = string | AnyObject | null;
+import { AnyObject, StoredItemKey, StoredItem } from '../types';
 
 export default function useAsyncStorage(key: StoredItemKey): [StoredItem, (item: StoredItem) => void, string] {
   const [storedItem, setStoredItem] = useState<StoredItem>(null);
@@ -19,7 +16,15 @@ export default function useAsyncStorage(key: StoredItemKey): [StoredItem, (item:
         await AsyncStorage.setItem(`@${key}`, value);
         setStoredItem(value);
       } else {
-        await AsyncStorage.setItem(`@${key}`, JSON.stringify(value));
+        switch (key) {
+          case 'artists':
+            const artists = [...storedItem as AnyObject[], value];
+            await AsyncStorage.setItem(`@${key}`, JSON.stringify(artists));
+            break;
+          default:
+            setStorageError(`Error storing ${key}`);
+            break;
+        }
         setStoredItem(value);
       }
     } catch (e) {

@@ -25,8 +25,9 @@ import LinkingConfiguration from './LinkingConfiguration';
 import { RootState } from '../store';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
+  const artists = useSelector((state: RootState) => state.artistsReducer.artists);
+
   useEffect(() => {
-    const artists = useSelector((state: RootState) => state.artistsReducer.artists);
     console.log()
     const socket = io("http://127.0.0.1:3000", { query: { artists: JSON.stringify(artists) } });
     socket.on("FromAPI", data => {
@@ -111,7 +112,7 @@ function BottomTabNavigator() {
         name="Settings"
         component={SettingsScreen}
         options={{
-          title: 'NFTracker',
+          title: 'Settings',
           tabBarIcon: ({ color }) => <TabBarIcon name="settings" color={color} />,
         }}
       />

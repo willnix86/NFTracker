@@ -6,19 +6,18 @@ import { Text, View } from '../components/Themed';
 
 import { Artist, RootTabScreenProps } from '../types';
 import { RootState } from '../store';
+import ArtistItem from '../components/ArtistItem';
 
 export default function HomeScreen({ navigation }: RootTabScreenProps<'Home'>) {
   const artists = useSelector((state: RootState) => state.artistsReducer.artists);
 
   return (
     <View style={styles.container}>
-      <View>
+      <View style={styles.subContainer}>
         <Text style={styles.title}>Tracked Artists</Text>
         {artists &&
           (artists as Artist[]).map((artist) => (
-            <Text key={artist.name}>
-              {artist.name}
-            </Text>
+            <ArtistItem key={artist.name} name={artist.name} hasNewDrops={false} />
           ))}
       </View>
     </View>
@@ -28,12 +27,15 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<'Home'>) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+  },
+  subContainer: {
+    marginVertical: 20,
+    marginHorizontal: 20,
   },
   title: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: 'bold',
+    marginBottom: 20
   },
   separator: {
     marginVertical: 30,

@@ -13,12 +13,15 @@ import io from "socket.io-client";
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
-import ModalScreen from '../screens/ModalScreen';
+
 import HomeScreen from '../screens/HomeScreen';
 import ArtistsScreen from '../screens/ArtistsScreen';
+import SettingsScreen from '../screens/SettingsScreen';
+import AddArtistScreen from '../screens/AddArtistScreen';
+
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
-import SettingsScreen from '../screens/SettingsScreen';
+
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   useEffect(() => {
@@ -51,7 +54,7 @@ function RootNavigator() {
     <Stack.Navigator>
       <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
-        <Stack.Screen name="Modal" component={ModalScreen} />
+        <Stack.Screen name="AddArtistModal" component={AddArtistScreen} options={{ title: 'Add Artist' }} />
       </Stack.Group>
     </Stack.Navigator>
   );
@@ -80,7 +83,7 @@ function BottomTabNavigator() {
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
           headerRight: () => (
             <Pressable
-              onPress={() => navigation.navigate('Modal')}
+              onPress={() => navigation.navigate('AddArtistModal')}
               style={({ pressed }) => ({
                 opacity: pressed ? 0.5 : 1,
               })}>

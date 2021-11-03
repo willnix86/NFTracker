@@ -27,7 +27,8 @@ import { RootState } from '../store';
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   useEffect(() => {
     const artists = useSelector((state: RootState) => state.artistsReducer.artists);
-    const socket = io("http://127.0.0.1:3000", { query: { artists: JSON.stringify(artists) } });
+    console.log()
+    const socket = io("http://127.0.0.1:3000", { query: { artists: JSON.stringify(artists.map(a => a.account)) } });
     socket.on("FromAPI", data => {
       console.log(data);
     });

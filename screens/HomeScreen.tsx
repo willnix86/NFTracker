@@ -4,7 +4,7 @@ import { StyleSheet } from 'react-native';
 
 import { Text, View } from '../components/Themed';
 
-import { AnyObject, RootTabScreenProps } from '../types';
+import { Artist, RootTabScreenProps } from '../types';
 import { RootState } from '../store';
 
 export default function HomeScreen({ navigation }: RootTabScreenProps<'Home'>) {
@@ -15,7 +15,7 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<'Home'>) {
       <View>
         <Text style={styles.title}>Tracked Artists</Text>
         {artists &&
-          (artists as AnyObject[]).map((artist) => (
+          (artists as Artist[]).map((artist) => (
             <Text key={artist.name}>
               {artist.name}
             </Text>

@@ -34,7 +34,11 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> = Composit
   NativeStackScreenProps<RootStackParamList>
 >;
 
-export type StoredItem = string | AnyObject | null;
+export type StoredItem = string | Artist | null;
 export type StoredItemKey = 'artists' | 'settings';
 
-export type AnyObject = { [key: string]: any }
+export type Artist = {
+  name: string;
+  account: string;
+  platform: string;
+}

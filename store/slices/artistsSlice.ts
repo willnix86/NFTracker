@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AnyObject } from '../../types';
+import { Artist } from '../../types';
 
 type SliceState = {
-  artists: AnyObject[]
+  artists: Artist[]
 };
 
 const initialState: SliceState = {
@@ -13,7 +13,7 @@ const artistsSlice = createSlice({
   name: 'artists',
   initialState: initialState,
   reducers: {
-    setArtists(state, action: PayloadAction<AnyObject[]>) {
+    setArtists(state, action: PayloadAction<Artist[]>) {
       state.artists = action.payload;
     },
   },

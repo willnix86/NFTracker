@@ -28,7 +28,7 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
   useEffect(() => {
     const artists = useSelector((state: RootState) => state.artistsReducer.artists);
     console.log()
-    const socket = io("http://127.0.0.1:3000", { query: { artists: JSON.stringify(artists.map(a => a.account)) } });
+    const socket = io("http://127.0.0.1:3000", { query: { artists: JSON.stringify(artists) } });
     socket.on("FromAPI", data => {
       console.log(data);
     });

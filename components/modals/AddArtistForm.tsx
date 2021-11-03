@@ -30,7 +30,7 @@ export default function AddArtistForm() {
     await StorageController.storeItem('artists', { 
       name: artistName,
       account: artistAccount,
-      platofrm: selectedPlatform
+      platform: selectedPlatform
     });
     
     if (!!StorageController.storageError) {

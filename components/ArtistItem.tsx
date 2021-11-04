@@ -17,9 +17,11 @@ export default function ArtistItem({ artist, hasNewDrops }: { artist: Artist, ha
     WebBrowser.openBrowserAsync(
       `https://opensea.io/${artist.account}?search[sortBy]=CREATED_DATE&search[sortAscending]=false&search[toggles][0]=IS_NEW`
     );
-    const unvisited = newDropAccounts.filter((acc) => acc !== artist.account);
-    dispatch(setNewDrops(unvisited));
-    // 
+    // Using a timeout just so the user doesn't see the change in the UI
+    setTimeout(() => {
+      const unvisited = newDropAccounts.filter((acc) => acc !== artist.account);
+      dispatch(setNewDrops(unvisited));
+    }, 2000);
   };
 
   if (hasNewDrops) {
@@ -36,7 +38,7 @@ export default function ArtistItem({ artist, hasNewDrops }: { artist: Artist, ha
   } else {
     return (
       <View style={styles.container}>
-        <Text style={styles.artistNoDrop}>{artist.name}</Text>
+        <Text style={styles.artist}>{artist.name}</Text>
       </View>
     )
   }
@@ -62,10 +64,6 @@ const styles = StyleSheet.create({
   },
   artist: {
     fontSize: 18,
-  },
-  artistNoDrop: {
-    fontSize: 18,
-    // marginLeft: 25,
   },
   artistLink: {
     marginHorizontal: 10,

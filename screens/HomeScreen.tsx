@@ -14,20 +14,27 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<'Home'>) {
 
   return (
     <View style={styles.container}>
-      {newDropAccounts.length > 0 && <View style={styles.subContainer}>
+      <View style={styles.subContainer}>
         <Text style={styles.title}>New Drops</Text>
-        {artists.map((artist: Artist) => {
-          if (newDropAccounts.includes(artist.account)) {
-            return <ArtistItem artist={artist} key={artist.name} hasNewDrops={true} />
-          }
-        })}
-      </View>}
+        {newDropAccounts.length > 0 ? 
+          artists.map((artist: Artist) => {
+            if (newDropAccounts.includes(artist.account)) {
+              return <ArtistItem artist={artist} key={artist.name} hasNewDrops={true} />
+            }
+          })
+          : <Text style={styles.text}>No new drops</Text>
+        }
+      </View>
       <View style={styles.subContainer}>
         <Text style={styles.title}>Tracked Artists</Text>
-        {artists &&
-          (artists as Artist[]).map((artist) => (
-            <ArtistItem artist={artist} key={artist.name} hasNewDrops={false} />
-          ))}
+        {artists.length > 0 ?
+          artists.map((artist) => {
+            if (!newDropAccounts.includes(artist.account)) {
+              return <ArtistItem artist={artist} key={artist.name} hasNewDrops={false} />
+            }
+          })
+          : <Text style={styles.text}>No tracked artists</Text>
+        }
       </View>
     </View>
   );
@@ -45,6 +52,9 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: 'bold',
     marginBottom: 20
+  },
+  text: {
+
   },
   separator: {
     marginVertical: 30,

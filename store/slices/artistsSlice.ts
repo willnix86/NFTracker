@@ -8,7 +8,7 @@ type SliceState = {
 
 const initialState: SliceState = {
   artists: [],
-  newDropAccounts: ['0xdcd49761c86547a18936cdcb46eb3cd65a34e617'],
+  newDropAccounts: [],
 };
 
 const artistsSlice = createSlice({

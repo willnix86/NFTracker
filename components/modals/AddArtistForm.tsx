@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { Appearance, StyleSheet, TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 
 import Colors from '../../constants/Colors';
@@ -55,7 +55,7 @@ export default function AddArtistForm() {
           onValueChange={(itemValue, itemIndex) =>
             setSelectedPlatform(itemValue)
           }>
-          <Picker.Item label="Opensea" value="opensea" />
+          <Picker.Item label="Opensea" value="opensea" color={Appearance.getColorScheme() === 'dark' ? Colors.dark.text : Colors.light.text} />
         </Picker>
       </View>
       <View style={styles.inputContainer}>

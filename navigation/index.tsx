@@ -63,8 +63,10 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
             updatedAccounts.push(artist);
           }
         });
-        dispatch(setNewDrops(updatedAccounts));
-        sendNotificationImmediately(updatedAccounts);
+        if (updatedAccounts.length > 0) { 
+          dispatch(setNewDrops(updatedAccounts));
+          sendNotificationImmediately(updatedAccounts);
+        }
       }
     });
     return () => {

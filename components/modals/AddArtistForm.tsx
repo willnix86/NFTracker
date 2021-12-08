@@ -26,6 +26,7 @@ export default function AddArtistForm() {
   const saveArtist = async() => {
     if (!selectedPlatform || !artistName || !artistAccount) {
       setError('Please fill out all fields');
+      return;
     }
     await StorageController.storeItem('artists', { 
       name: artistName,
